@@ -1,2 +1,2 @@
-web: gunicorn mapuamates.wsgi:application --preload --log-file -
+web: gunicorn malayanfolio.wsgi:application --preload --log-file -
 heroku ps:scale web=1
