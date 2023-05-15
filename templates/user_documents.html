@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<div class="w-[95%] m-auto flex flex-row">
+    <div class="mt-5 w-[90%]">
+        <div class="flex flex-row items-center LibreFranklinRegular">
+            {% if userProfile.pfp %}
+            <img src="{{userProfile.pfp.url}}" class="profile-documents">
+            {% else %}
+            <img src="{% static 'images/default.png' %}" class="profile-documents">
+            {% endif %}
+            <span class=" text-[25px] ml-4">{{userProfile.fname|default_if_none:"---"}} {{userProfile.lname|default_if_none:"---"}} | Documents</span>
+        </div>
+        <hr class="mt-2 border-[2px] w-[75%]">
+        <div class="flex flex-row">
+            <div class="w-[18%] flex flex-row items-center LibreFranklinRegular py-4 text-[#111937]">
+                <a class="mr-auto text-gray-400" href="{% url 'profile' userProfile.id %}"><span><i class="fa-solid fa-circle-arrow-left fa-lg mr-2"></i>Back to Profile </span></a>
+            </div>
+            <div class="w-[23%] py-5 text-center">
+                <a href="{% url 'documents' 'Certificates' userProfile.id %}"><div class="w-[90%] m-auto py-2 cursor-pointer {% if file_type == 'Certificates' %} bg-gray-300 {% else %} hover:bg-gray-300 {% endif %}">
+                    <span class="ArimoBold text-[20px]">CERTIFICATES</span>
+                    
+                </div></a>
+            </div>
+            <div class="w-[23%] py-5 text-center">
+                <a href="{% url 'documents' 'Activities' userProfile.id %}"><div class="w-[80%] m-auto py-2  cursor-pointer {% if file_type == 'Activities' %} bg-gray-300 {% else %} hover:bg-gray-300 {% endif %}">
+                    <span class="ArimoBold text-[20px]">ACTIVITIES</span>
+                </div></a>
+            </div>
+        </div>
+        {% if docu_data %}
+        <div class="mt-9 flex flex-row flex-wrap pb-10 ">
+            {% for docu in docu_data %}
+            <a target="_blank" href="{{docu.user_file.url}}" download> 
+                <div class="text-center mt-3 w-[280px] hover:bg-gray-300 mr-5 py-4 cursor-pointer rounded-[8px] overflow-hidden text-ellipsis">
+                    <span id="filetype-{{docu.id}}">ss</span>
+                    <span id="{{docu.id}}" class="filename LibreFranklinRegular text-[15px]">{{docu.user_file}}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %} 
+        <div class="text-center mt-16">
+            <span class="LibreFranklinRegular text-[18px] "><i>No files recorded</i></span>
+        </div>
+        {% endif %}
+    </div>
+    
+</div>
+<script>
+    let files = document.getElementsByClassName('filename')
+    for(file of files){
+        if (file.innerHTML.split(".")[1] === "pdf"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/pdf.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "docx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/doc.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "jpg"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/jpg.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "xlsx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/xls-file.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "svg"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/svg.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "ppt" || file.innerHTML.split(".")[1] === "pptx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/ppt.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "zip" || file.innerHTML.split(".")[1] === "rar"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/zip.png' %}" class="w-[180px] m-auto pb-4">`
+        }
+        else{document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/file.png' %}" class="w-[180px] m-auto pb-4">`
+            
+        }
+        file.innerHTML = file.innerHTML.split('/')[1]
+    }
+    
+</script>
+{% endblock %}

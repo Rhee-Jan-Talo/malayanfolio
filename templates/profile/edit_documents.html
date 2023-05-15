@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="w-[90%] m-auto  mt-4 pb-12">
+    <p class="ArimoBold text-[60px] text-[#111937]">Edit Profile</p>
+    <hr class="border-[1px] w-[93%]">
+    <div class="flex flex-row">
+        <div class="w-[23%] py-5 text-center">
+            <a href='{% url "edit-profile" %}'><div class="w-[80%] m-auto py-2 hover:bg-gray-400 cursor-pointer">
+                <span class="ArimoBold text-[20px]">PHOTO AND INFO</span>
+            </div></a>
+        </div>
+        <div class="w-[23%] py-5 text-center">
+            <a href='{% url "edit-profile-contact" %}'><div class="w-[80%] m-auto py-2 hover:bg-gray-400 cursor-pointer">
+                <span class="ArimoBold text-[20px]">CONTACT</span>
+            </div></a>
+        </div>
+        <div class="w-[23%] py-5 text-center">
+            <a href='{% url "edit-profile-about-me" %}'><div class="w-[80%] m-auto py-2 hover:bg-gray-400 cursor-pointer">
+                <span class="ArimoBold text-[20px]">ABOUT ME</span>
+            </div></a>
+        </div>
+        <div class="w-[23%] py-5 text-center">
+            <a href='{% url "edit-documents" %}'><div class="w-[80%] m-auto py-2 bg-gray-400 cursor-pointer">
+                <span class="ArimoBold text-[20px]">DOCUMENTS</span>
+            </div></a>
+        </div> 
+    </div>
+    <div class="mt-4 flex flex-row ">
+        <div class="w-[50%]  border-r-[.5px] {% if docu_cert %} h-auto pb-10 {% else %} h-screen {% endif %}">
+            <div class="mt-4 w-[90%] m-auto flex flex-row">
+                <span class="ArimoBold text-[22px] "><u>CERTIFICATES</u></span>
+                <form class="ml-auto" method="POST" enctype="multipart/form-data" action="{% url 'save-file-cert' %}">{% csrf_token %}
+                    <label for="upload-file-cert" class="ArimoBold text-[16px] cursor-pointer">UPLOAD HERE</label>
+                    <input type="text" name="folder_type" value="Certificates" hidden>
+                    <input id="upload-file-cert" name="file" onchange="this.form.submit()"  type="file" hidden>
+                </form>
+            </div>
+            {% if docu_cert %}
+            <div class="mt-4 flex flex-row flex-wrap">
+                {% for docu in docu_cert %}
+                <div class="text-center mt-3 w-[200px] hover:bg-gray-300 mr-5 py-4 cursor-pointer rounded-[8px] overflow-hidden text-ellipsis">
+                    <div class="flex flex-row">
+                        <button onclick="DeleteFileModal('{{docu.id}}')" class="count-2 ml-auto mr-4 text-[15px]"><b>&#10005;</b></button>
+                    </div>
+                    <span id="filetype-{{docu.id}}">filetype</span>
+                    <span id="{{docu.id}}" class="filename LibreFranklinRegular text-[15px]">{{docu.user_file}}</span>
+                </div>
+                <!--delete file modal-->
+                <div id="delete-file-modal-{{docu.id}}" class="hidden h-full pt-[18%] xl:pt-[10%] w-full fixed z-[1] overflow-auto left-[0] top-[0] bg-[rgb(0,0,0)] bg-[rgba(0,0,0,0.4)]">
+                    <div class="w-[280px] xl:w-[400px] p-5 m-auto bg-white">
+                        <div id="withdraw-confirmation" class=""> <!--MODAL FOR WITHDRAWAL CONFIRMATION -->
+                            <div class="flex flex-row">
+                                <button onclick="RemoveDeleteFileModal('{{docu.id}}')" class="count-2 ml-auto mt-2 mr-2"><b>&#10005;</b></button>
+                            </div>
+                            <div class="w-[100%] m-auto text-center p-5 xl:p-10">
+                                <p class="font-[500] text-[18px] xl:text-[20px] 2xl:text-[24px]">Are you sure you want to Delete this file?</p>
+                            </div>
+                            <div class="flex flex-row text-[16px] justify-center">
+                                <button onclick="RemoveDeleteFileModal('{{docu.id}}')" class="border-0  px-[3rem] py-[.40rem] font-[500] text-primary">No</button>
+                                <a href="{% url 'delete-file' docu.id %}"><button onclick="" class="ml-2 border-0 bg-[#111937] px-[3rem] py-[.40rem] font-[500] text-white">Yes</button></a>
+                            </div><br>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %} 
+            <div class="text-center mt-12">
+                <span class="LibreFranklinRegular text-[16px] "><i>No files. Kindly upload files using the "UPLOAD HERE" button</i></span>
+            </div>
+            {% endif %}
+        </div>
+        <div class="pl-2 w-[50%]  border-l-[1.5px] h-auto pb-10">
+            <div class="mt-4 w-[90%] m-auto flex flex-row">
+                <span class="ArimoBold text-[22px] "><u>ACTIVITIES</u></span>
+                <form class="ml-auto" method="POST" enctype="multipart/form-data" action="{% url 'save-file-act' %}">{% csrf_token %}
+                    <label for="upload-file-act" class="ArimoBold text-[16px] cursor-pointer">UPLOAD HERE</label>
+                    <input type="text" name="folder_type" value="Activities" hidden>
+                    <input id="upload-file-act" type="file" name="file" onchange="this.form.submit()" hidden>
+                </form>
+            </div>
+            {% if docu_act %}
+            <div class="mt-4 flex flex-row flex-wrap">
+                {% for docu in docu_act %}
+                <div class="text-center mt-3 w-[200px] hover:bg-gray-300 mr-5 py-4 cursor-pointer rounded-[8px] overflow-hidden text-ellipsis">
+                    <div class="flex flex-row">
+                        <button onclick="DeleteFileModal('{{docu.id}}')" class="count-2 ml-auto mr-4 text-[15px]"><b>&#10005;</b></button>
+                    </div>
+                    <span id="filetype-{{docu.id}}">filetype</span>
+                    <span id="{{docu.id}}" class="filename LibreFranklinRegular text-[15px]">{{docu.user_file}}</span>
+                </div>
+                <!--delete file modal-->
+                <div id="delete-file-modal-{{docu.id}}" class="hidden h-full pt-[18%] xl:pt-[10%] w-full fixed z-[1] overflow-auto left-[0] top-[0] bg-[rgb(0,0,0)] bg-[rgba(0,0,0,0.4)]">
+                    <div class="w-[280px] xl:w-[400px] p-5 m-auto bg-white">
+                        <div id="withdraw-confirmation" class=""> <!--MODAL FOR WITHDRAWAL CONFIRMATION -->
+                            <div class="flex flex-row">
+                                <button onclick="RemoveDeleteFileModal('{{docu.id}}')" class="count-2 ml-auto mt-2 mr-2"><b>&#10005;</b></button>
+                            </div>
+                            <div class="w-[100%] m-auto text-center p-5 xl:p-10">
+                                <p class="font-[500] text-[18px] xl:text-[20px] 2xl:text-[24px]">Are you sure you want to Delete this file?</p>
+                            </div>
+                            <div class="flex flex-row text-[16px] justify-center">
+                                <button onclick="RemoveDeleteFileModal('{{docu.id}}')" class="border-0  px-[3rem] py-[.40rem] font-[500] text-primary">No</button>
+                                <a href="{% url 'delete-file' docu.id %}"><button onclick="" class="ml-2 border-0 bg-[#111937] px-[3rem] py-[.40rem] font-[500] text-white">Yes</button></a>
+                            </div><br>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %} 
+            <div class="text-center mt-12">
+                <span class="LibreFranklinRegular text-[16px] "><i>No files. Kindly upload files using the "UPLOAD HERE" button</i></span>
+            </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    let files = document.getElementsByClassName('filename')
+    for(file of files){
+        if (file.innerHTML.split(".")[1] === "pdf"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/pdf.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "docx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/doc.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "jpg"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/jpg.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "xlsx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/xls-file.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "svg"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/svg.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "ppt" || file.innerHTML.split(".")[1] === "pptx"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/ppt.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else if (file.innerHTML.split(".")[1] === "zip" || file.innerHTML.split(".")[1] === "rar"){
+            document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/zip.png' %}" class="w-[120px] m-auto pb-4">`
+        }
+        else{document.getElementById(`filetype-${file.id}`).innerHTML=`<img src="{% static 'images/file.png' %}" class="w-[120px] m-auto pb-4">`
+            
+        }
+        file.innerHTML = file.innerHTML.split('/')[1]
+    }
+</script>
+<script>
+
+    function DeleteFileModal(docu_id){
+        document.getElementById(`delete-file-modal-${docu_id}`).classList.remove('hidden')
+    }
+    function RemoveDeleteFileModal(docu_id){
+        document.getElementById(`delete-file-modal-${docu_id}`).classList.add('hidden')
+    }
+</script>
+{% endblock %}
