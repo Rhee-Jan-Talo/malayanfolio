@@ -7,11 +7,6 @@ from profiles.forms import UserProfileForm, ExtraCurriForm, InterestForm, Langua
 from .utils import render_to_pdf
 
 
-import prince
-
-
-from django.template.loader import render_to_string
-from wkhtmltopdf.views import PDFTemplateResponse
 # Create your views here.
 
 @login_required
@@ -190,24 +185,6 @@ def PDFResume(request):
     pdf = render_to_pdf('sample.html',context)
     return HttpResponse(pdf, content_type='application/pdf')
 
-'''
-def PDFResume2(request):
-    userProfile = UserProfile.objects.get(user_id = get_user_account(request))
-    userOutputs = Outputs.objects.get(user_id = userProfile.id)
-    userClubs = Clubs.objects.filter(user_id = userProfile.id)
-    userLanguages = Languages.objects.filter(user_id = userProfile.id)
-    userInterests = Interests.objects.filter(user_id = userProfile.id)
-    userEducation = Education.objects.filter(user_id = userProfile.id)
-    context={
-        'userProfile' : userProfile,
-        'userOutputs':userOutputs,
-        'userClubs':userClubs,
-        'userLanguages':userLanguages,
-        'userInterests':userInterests,
-        'userEducation':userEducation,
-    }
-    return render(request, 'sample.html', context)
-'''
 
 
 # functions (MOVE TO UTILS.PY)
