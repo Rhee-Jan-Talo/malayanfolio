@@ -1,0 +1,80 @@
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
+    </style>
+</head>
+<style>
+    
+    * {
+        font-size: 11px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, sans-serif;
+    }
+</style>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 45%;">
+            <p>{{userProfile.fname|default_if_none:"---"|upper}} {{userProfile.lname|default_if_none:"---"|upper}}</p>
+            <p>{{userProfile.get_strand_display|default_if_none:"---"|upper}}</p>
+        </td>
+        <td style="width: 10%;">&nbsp;</td>
+        <td style="width: 45%; "><img src="{{ userProfile.pfp.url }}" width="200px" height="200px"></td>
+    </tr>
+</table>
+<hr>
+<p>ABOUT ME</p>
+<p>{{userProfile.about|default_if_none:"---"}}</p>
+<hr>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 45%;">
+            <span>EDUCATION</span>
+            {% if userEducation %}
+            {% for educ in userEducation %}
+            <ul>
+                    <li><b>{{educ.get_educ_type_display}}</b></li>
+                    <span>{{educ.school|default_if_none:"---"|title}}</span><br>
+                    <span>{{educ.year|default_if_none:"---"|title}}</span>
+            </ul>
+            {% endfor %}
+            {% else %}
+            <p class="my-1 text-[15px]"><b>---</b></p>
+            {% endif %}
+
+            <span>INTERESTS</span>
+            {% if userInterests %}
+                {% for interest in userInterests %}
+                <ul>
+                    <li>{{interest.get_user_interest_display}}</li>
+                </ul>
+                {% endfor %}
+            {% else %}
+            <span><b>---</b></span>
+            {% endif %}
+        </td>
+        <td style="width: 10%;">&nbsp;</td>
+        <td style="width: 45%; ">
+            <span>EXTRACURRICULAR</span>
+            {% if userClubs %}
+                {% for clubs in userClubs %}
+                <ul>
+                    <li>{{ clubs.get_user_club_display }}</li>
+                </ul>
+                {% endfor %}
+            {% else %}
+            <span><b>---</b></span>
+            {% endif %}
+
+            <span>LANGUAGES</span>
+            {% if userLanguages %}
+            {% for lang in userLanguages %}
+            <ul>
+                <li><b>{{lang.user_lang|title}}</b></li>
+                <li>{{lang.get_lang_proficiency_display}}</li>
+            </ul>
+            {% endfor %}
+            {% else %}
+            <span><b>---</b></span>
+            {% endif %}
+        </td>
+    </tr>
+</table>

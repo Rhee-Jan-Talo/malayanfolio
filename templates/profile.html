@@ -16,10 +16,10 @@
         <hr class="mt-2 border-[2px]">
         <div class="flex flex-row items-center LibreFranklinRegular py-4 text-[#111937] w-[85%]">
             <span class="text-[18px]">{{UserProfile.get_strand_display|default_if_none:"---"|upper}}</span>
-            <a class="ml-auto text-gray-400" href="{% url 'documents' 'Certificates' UserProfile.id %}"><span  >Link to Documents <i class="fa-solid fa-circle-arrow-right fa-lg"></i></span></a>
+            <a class="ml-auto text-gray-400" href="{% url 'documents' 'Certificates' UserProfile.id %}"><span>Link to Documents <i class="fa-solid fa-circle-arrow-right fa-lg"></i></span></a>
         </div>
         <hr class="border-[2px] w-[85%]">
-        <div class="flex flex-row items-center LibreFranklinRegular py-4 text-[#111937]">
+        <div class="flex flex-row items-center LibreFranklinRegular py-4 text-[#111937] w-[85%]">
             <span class="text-[18px]"><i class="fa-regular fa-envelope fa-lg mr-2" style="color:#111937"></i>{{UserProfile.email|default_if_none:"---"}}</span>
         </div>
         <hr class="border-[2px] w-[85%]">

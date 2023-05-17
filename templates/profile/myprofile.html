@@ -19,8 +19,10 @@
             <a class="ml-auto text-gray-400" href="{% url 'my-documents' 'Certificates' %}"><span  >Link to Documents <i class="fa-solid fa-circle-arrow-right fa-lg"></i></span></a>
         </div>
         <hr class="border-[2px] w-[85%]">
-        <div class="flex flex-row items-center LibreFranklinRegular py-4 text-[#111937]">
+        <div class="flex flex-row items-center LibreFranklinRegular py-4 text-[#111937] w-[85%]">
             <span class="text-[18px]"><i class="fa-regular fa-envelope fa-lg mr-2" style="color:#111937"></i>{{userProfile.email|default_if_none:"---"}}</span>
+            <a class="ml-auto text-gray-400" href="{% url 'pdf-resume' %}"><span>Download as Resume <i class="fa-solid fa-circle-arrow-down fa-lg"></i></span></a>
+
         </div>
         <hr class="border-[2px] w-[85%]">
         <div class="flex flex-row gap-[25px] mt-5 pb-5 ">

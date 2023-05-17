@@ -13,7 +13,7 @@
             {% endif %}
             <span class=" text-[25px] ml-4">{{userProfile.fname|default_if_none:"---"}} {{userProfile.lname|default_if_none:"---"}} | Documents</span>
         </div>
-        <hr class="mt-2 border-[2px] w-[75%]">
+        <hr class="mt-2 border-[2px] w-[90%]">
         <div class="flex flex-row">
             <div class="w-[18%] flex flex-row items-center LibreFranklinRegular py-4 text-[#111937]">
                 <a class="mr-auto text-gray-400" href="{% url 'profile' userProfile.id %}"><span><i class="fa-solid fa-circle-arrow-left fa-lg mr-2"></i>Back to Profile </span></a>
@@ -27,6 +27,11 @@
             <div class="w-[23%] py-5 text-center">
                 <a href="{% url 'documents' 'Activities' userProfile.id %}"><div class="w-[80%] m-auto py-2  cursor-pointer {% if file_type == 'Activities' %} bg-gray-300 {% else %} hover:bg-gray-300 {% endif %}">
                     <span class="ArimoBold text-[20px]">ACTIVITIES</span>
+                </div></a>
+            </div>
+            <div class="w-[23%] py-5 text-center">
+                <a href="{% url 'documents' 'Others' userProfile.id %}"><div class="w-[80%] m-auto py-2  cursor-pointer {% if file_type == 'Others' %} bg-gray-300 {% else %} hover:bg-gray-300 {% endif %}">
+                    <span class="ArimoBold text-[20px]">OTHERS</span>
                 </div></a>
             </div>
         </div>

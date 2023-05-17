@@ -43,6 +43,11 @@ urlpatterns = [
 
     path(
         #"register/", views.RegisterAccount.as_view(), name="register-account"
+        "edit_profile/documents/save_others", views.SaveFileOthers, name="save-file-others"
+    ),
+
+    path(
+        #"register/", views.RegisterAccount.as_view(), name="register-account"
         "edit_profile/about-me/delete/<ec_id>", views.DeleteEC, name="delete-ec"
     ),
 
@@ -57,6 +62,11 @@ urlpatterns = [
     path(
         #"register/", views.RegisterAccount.as_view(), name="register-account"
         "edit_profile/documents/delete/<docu_id>", views.DeleteFile, name="delete-file"
+    ),
+
+    path(
+        #"register/", views.RegisterAccount.as_view(), name="register-account"
+        "edit_profile/resume/", views.PDFResume, name="pdf-resume"
     ),
 
 

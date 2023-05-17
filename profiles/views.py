@@ -1,8 +1,17 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from profiles.models import *
 from profiles.forms import UserProfileForm, ExtraCurriForm, InterestForm, LanguageForm
+from .utils import render_to_pdf
+
+
+import prince
+
+
+from django.template.loader import render_to_string
+from wkhtmltopdf.views import PDFTemplateResponse
 # Create your views here.
 
 @login_required
@@ -92,9 +101,11 @@ def EditDocuments(request):
     Profile = UserProfile.objects.get(user_id=get_user_account(request))
     docu_data_cert = Documents.objects.filter(user_id = Profile.id).filter(folder_type="Certificates").order_by("-id")
     docu_data_act = Documents.objects.filter(user_id = Profile.id).filter(folder_type="Activities").order_by("-id")
+    docu_data_others = Documents.objects.filter(user_id = Profile.id).filter(folder_type="Others").order_by("-id")
     context = {
         'docu_cert':docu_data_cert,
         'docu_act':docu_data_act,
+        'docu_others':docu_data_others,
         'userProfile': Profile,
     }
     return render(request, 'profile/edit_documents.html', context)
@@ -107,6 +118,12 @@ def SaveFileAct(request):
 
 @login_required 
 def SaveFileCert(request):
+    save_file(request)
+    messages.success(request, 'File saved')
+    return redirect('edit-documents')
+
+@login_required 
+def SaveFileOthers(request):
     save_file(request)
     messages.success(request, 'File saved')
     return redirect('edit-documents')
@@ -153,6 +170,44 @@ def MyDocuments(request, file_type):
         'file_type': file_type,
     }
     return render(request, 'profile/mydocuments.html', context)
+
+
+def PDFResume(request):
+    userProfile = UserProfile.objects.get(user_id = get_user_account(request))
+    userOutputs = Outputs.objects.get(user_id = userProfile.id)
+    userClubs = Clubs.objects.filter(user_id = userProfile.id)
+    userLanguages = Languages.objects.filter(user_id = userProfile.id)
+    userInterests = Interests.objects.filter(user_id = userProfile.id)
+    userEducation = Education.objects.filter(user_id = userProfile.id)
+    context={
+        'userProfile' : userProfile,
+        'userOutputs':userOutputs,
+        'userClubs':userClubs,
+        'userLanguages':userLanguages,
+        'userInterests':userInterests,
+        'userEducation':userEducation,
+    }
+    pdf = render_to_pdf('sample.html',context)
+    return HttpResponse(pdf, content_type='application/pdf')
+
+'''
+def PDFResume2(request):
+    userProfile = UserProfile.objects.get(user_id = get_user_account(request))
+    userOutputs = Outputs.objects.get(user_id = userProfile.id)
+    userClubs = Clubs.objects.filter(user_id = userProfile.id)
+    userLanguages = Languages.objects.filter(user_id = userProfile.id)
+    userInterests = Interests.objects.filter(user_id = userProfile.id)
+    userEducation = Education.objects.filter(user_id = userProfile.id)
+    context={
+        'userProfile' : userProfile,
+        'userOutputs':userOutputs,
+        'userClubs':userClubs,
+        'userLanguages':userLanguages,
+        'userInterests':userInterests,
+        'userEducation':userEducation,
+    }
+    return render(request, 'sample.html', context)
+'''
 
 
 # functions (MOVE TO UTILS.PY)
