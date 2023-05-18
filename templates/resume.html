@@ -1,0 +1,107 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css" media="print">
+        @page 
+        {
+            size: auto;   /* auto is the initial value */
+            margin: 1mm;  /* this affects the margin in the printer settings */
+        }
+    </style>
+    <title>Malayanfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:title" content="Malayanfolio" />
+    <meta property="og:image" content="{% static 'images/logo.webp' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.webp' %}">
+    {% tailwind_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<div class="w-[90%] m-auto">
+    <div class="flex flex-row">
+        <div class="ml-auto">
+            <button class="mt-6 bg-gray-300 py-3 px-8 rounded-[10px]" onclick="printTab()" id="print-button" >PRINT OR SAVE TO PDF</button>
+        </div>
+    </div>
+    <div class="mt-12 flex flex-row">
+        <div>
+            <p class="text-[40px] ArimoBold">{{userProfile.fname|default_if_none:"---"}} {{userProfile.lname|default_if_none:"---"}}</p>
+            <p class="text-[20px] ArimoRegular">{{userProfile.get_strand_display|default_if_none:"---"|upper}}</p>
+            <p class="text-[18px] ArimoRegular mt-1">{{userProfile.email|default_if_none:"---"|upper}}</p>
+        </div>
+        <div class="ml-auto">
+            {% if userProfile.pfp %}
+            <img src="{{userProfile.pfp.url}}" class="profile-resume">
+            {% else %}
+            <img src="{% static 'images/default.png' %}" class="profile-resume">
+            {% endif %}
+        </div>
+    </div>
+    <hr class="mt-6 border-[1.5px] border-black">
+    <div class="mt-6">
+        <p class="text-[20px] ArimoBold">ABOUT ME</p>
+        <span class="LibreFranklinRegular">{{userProfile.about|default_if_none:"---"}}</span>
+    </div>
+    <hr class="mt-10 border-[1.5px] border-black">
+    <div class="mt-6 flex flex-row">
+        <div class=" w-[280px]">
+            <p class="text-[20px] ArimoBold">EDUCATION</p>
+            {% if userEducation %}
+            {% for educ in userEducation %}
+                    <div class="my-4 LibreFranklinRegular ml-4">
+                        <li class="text-[15px]"><b>{{educ.get_educ_type_display}}</b></li>
+                        <p class="text-[15px]">{{educ.school|default_if_none:"---"|title}} | {{educ.year|default_if_none:"---"|title}}</p>
+                    </div>
+            {% endfor %}
+            {% else %}
+            <p class="my-1 text-[15px]"><b>---</b></p>
+            {% endif %}
+        </div>
+        <div class="ml-24"> 
+            <p class="text-[20px] ArimoBold">LANGUAGES</p>
+            {% if userLanguages %}
+            {% for lang in userLanguages %}
+            <div class="my-4 LibreFranklinRegular ml-4">
+                <li class="text-[15px]"><b>{{lang.user_lang|title}}</b></li>
+                <p class="text-[15px]">{{lang.get_lang_proficiency_display}}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="my-1 text-[15px]"><b>---</b></p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mt-6 flex flex-row pb-10">
+        <div class="mt-6 w-[280px]">
+            <p class="text-[20px] ArimoBold">EXTRACURRICULAR</p>
+            {% if userClubs %}
+                {% for clubs in userClubs %}
+                <li class="my-2 text-[15px] ml-4">{{ clubs.get_user_club_display }}</li>
+                {% endfor %}
+            {% else %}
+            <p class="my-1 text-[15px]"><b>---</b></p>
+            {% endif %}
+        </div>
+        <div class="mt-6 ml-24">
+            <p class="text-[20px] ArimoBold">INTERESTS</p>
+            {% if userInterests %}
+                {% for interest in userInterests %}
+                <div class="my-4 LibreFranklinRegular ml-4">
+                <li class="my-4 text-[15px]">{{interest.get_user_interest_display}}</li>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p class="my-1 text-[15px]"><b>---</b></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    function printTab(){
+        document.getElementById('print-button').classList.add('hidden')
+        window.print()
+        document.getElementById('print-button').classList.remove('hidden')
+    }
+</script>

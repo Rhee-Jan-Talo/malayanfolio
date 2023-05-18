@@ -182,8 +182,7 @@ def PDFResume(request):
         'userInterests':userInterests,
         'userEducation':userEducation,
     }
-    pdf = render_to_pdf('sample.html',context)
-    return HttpResponse(pdf, content_type='application/pdf')
+    return render(request, 'resume.html', context)
 
 
 
