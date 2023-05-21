@@ -205,7 +205,6 @@ def save_outputs(request, userOutputs):
 
 def save_profile_contacts(request, userProfile):
     userProfile.email = request.POST['email']
-    userProfile.onedlink = request.POST['onedlink']
     userProfile.save() 
 
 def save_profile(request, userProfile):
